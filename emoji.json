@@ -1,0 +1,16 @@
+{
+  "emoji": {
+    "autoplay": "<:icon_autoplay:1076133746429931630>",
+    "previous": "<:icon_previous:1076122933908471849>",
+    "play": "<:resume:1076006384526704640>",
+    "duration" : "<:Time_Icon:1076021766524256286>",
+    "pause": "<:pause:1076001406881898596>",
+    "song": "<a:Musica:1076023421311397889>",
+    "stop": "<:musicstop_icons:1076006666056777758>",
+    "queue": "📄",
+    "success": "☑️",
+    "repeat": "🔁",
+    "error": "❌",
+    "skip": "<:icon_skip:1076055882716151838>"
+  }
+}
