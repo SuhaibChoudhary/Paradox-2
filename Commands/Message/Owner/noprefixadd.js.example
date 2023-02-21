@@ -3,8 +3,8 @@ const db = require("../../../Database/noprefix.js");
 
 module.exports = {
   name: "noprefixadd",
-  aliases: "npa",
   cooldown: "5",
+ownersOnly: true,
   run: async (client, message, args) => {
     const user = message.guild.members.cache.get(args[0]) || message.mentions.members.first();
    if (!user){

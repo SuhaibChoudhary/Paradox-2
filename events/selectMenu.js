@@ -7,11 +7,13 @@ const queue = client.distube.getQueue(interaction.message);
 
 
 if (!interaction.isSelectMenu()) return;
-if (!interaction.member.voice.channel) return interaction.reply(`**${client.emotes.error} : You can not access this fuction without join voice channel!!**`)
 
-   if (!interaction.member.voice.channelId === interaction.guild.members.me.voice.channelId) return interaction.reply(`**${client.emotes.error} : For using this function join voice channel there already playing!!**`)
   
 if (interaction.customId === 'songPlay') {
+  if (!interaction.member.voice.channel) return interaction.reply(`**${client.emotes.error} : You can not access this fuction without join voice channel!!**`)
+
+   if (interaction.member.voice.channelId !== interaction.guild.members.me.voice.channelId) return interaction.reply(`**${client.emotes.error} : For using this function join voice channel there already playing!!**`)
+  
     await interaction.deferUpdate();
 if(queue){
 

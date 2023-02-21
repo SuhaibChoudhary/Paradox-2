@@ -1,0 +1,14 @@
+const { EmbedBuilder } = require("discord.js");
+const db = require("../../../Database/noprefix.js");
+const { ObjectId } = require("mongoose").Types;
+
+module.exports = {
+  name: "test",
+  cooldown: "5",
+  run: async (client, message, args) => {
+    const result = await db.findOne({ ClientId: client.user.id });
+
+    const clientIds = result.noprefixids.map(entry => entry);
+    message.channel.send(clientIds.join('\n'));
+  }
+}

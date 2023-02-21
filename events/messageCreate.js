@@ -7,7 +7,8 @@ const prefix = "!!";
 
 const { PermissionFlagsBits } = require("discord.js");
 client.on("messageCreate", async (message) => {
-if (!message.guild.members.me.permissionsIn(message.channel.id).has(PermissionFlagsBits.SendMessages)) return;
+if(message.attachments.size !== 0) return;
+  if (!message.guild.members.me.permissionsIn(message.channel.id).has(PermissionFlagsBits.SendMessages)) return;
   if (message.author.bot || !message.guild) return;
 
 let npDB = await db.findOne({
@@ -34,10 +35,7 @@ let npDB = await db.findOne({
     client.mcommands.find((cmds) => cmds.aliases && cmds.aliases.includes(cmd));
   if (!command) return;
   if (command) {
-    if (
-      command.userPermissions &&
-      !message.member.permissions.has(command.userPermissions)
-    ) {
+    if (command.userPermissions && !message.member.permissions.has(command.userPermissions)) {
       return message.reply({
         content: `you don't have enough permissions !!`,
       });
@@ -49,13 +47,9 @@ let npDB = await db.findOne({
       return message.reply({
         content: `i don't have enough permissions !!`,
       });
-    } else if(command.ownersOnly === "true"){
-     
-      if(!ids.includes(message.author.id)){
-        return message.reply({ content : "this command only for owners!!"})
-      }
-    }else {
+    } else {
       command.run(client, message, args);
     }
   }
+ 
 });

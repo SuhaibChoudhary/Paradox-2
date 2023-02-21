@@ -16,25 +16,27 @@ module.exports = {
     const row = new ActionRowBuilder()
       .addComponents(
         new SelectMenuBuilder()
-          .setCustomId('select')
+          .setCustomId('helpMenu')
           .setPlaceholder('Noisy Always Awsome')
           .addOptions([
             {
               label: 'Info',
               description: 'This is a description',
-              value: 'first_option',
+              value: 'info',
+              emoji: '1077495959703007283'
 
             },
             {
-              label: 'Music',
+              label: 'Miscallineous',
               description: 'This is also a description',
-              value: 'second_option',
-              emoji: "1076001290141835324",
+              value: 'miscallineous',
+              emoji: "1077496178612125727",
             },
             {
-              label: 'Moderation',
+              label: 'Music',
               description: 'This is a description as well',
               value: 'third_option',
+              emoji: '1077496268433137754'
             },
           ]),
       );
