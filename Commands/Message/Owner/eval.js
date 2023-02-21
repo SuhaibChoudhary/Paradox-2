@@ -1,5 +1,5 @@
 const { codeBlock } = require("@discordjs/builders");
-
+const client = require("../../../index");
 const discord = require("discord.js")
 module.exports = {
 

@@ -1,6 +1,7 @@
 const discord = require("discord.js");
 const econfig = require('./emoji.json');
-const {  ActionRowBuilder, ButtonBuilder, ButtonStyle, Events, Client, GatewayIntentBits, Partials, Collection, ActivityType } = require("discord.js");
+const playerData = require('./Database/playerData');
+const {  ActionRowBuilder, ButtonBuilder, ButtonStyle, Events, Client, GatewayIntentBits, Partials, Collection, ActivityType, SelectMenuBuilder} = require("discord.js");
 const fs = require("fs");
 const { readdirSync } = require("fs");
 const { mongoUrl } = require("./settings/config.js")
@@ -57,14 +58,32 @@ const status = queue =>
 
 client.distube
   .on('playSong', async (queue, song) => {
+const row1 = new ActionRowBuilder()
+ .addComponents(
+				new SelectMenuBuilder()
 
+					.setCustomId('songPlay')
+
+					.setPlaceholder('Want add some filters?')
+
+					.addOptions([{
+label: 'Reset',
+value: 'filter_reset',
+},
+{
+label: 'nightcore',
+value: 'filter_nightcore',
+},
+					]),
+			); 
+    
     const row = new ActionRowBuilder()
+   
 			.addComponents(
         new ButtonBuilder()
-				.setCustomId('previous-btn')
-        .setEmoji(client.emotes.previous)			
-        .setStyle(ButtonStyle.Secondary)
-        .setDisabled(true),
+		.setCustomId('lyrics-btn')
+        .setEmoji(client.emotes.lyrics)		
+        .setStyle(ButtonStyle.Secondary),
     
 				new ButtonBuilder()
 					.setCustomId('pause-btn')
@@ -76,34 +95,55 @@ client.distube
           .setEmoji(client.emotes.play)
           .setStyle(ButtonStyle.Secondary),
 
-         new ButtonBuilder()
-					.setCustomId('stop-btn')
-          .setEmoji(client.emotes.stop)
-          .setStyle(ButtonStyle.Secondary),
+new ButtonBuilder()
+.setCustomId('stop-btn')
+.setEmoji(client.emotes.stop)
+.setStyle(ButtonStyle.Secondary),
         
-        new ButtonBuilder()
-					.setCustomId('skip-btn')
-          .setEmoji(client.emotes.skip)
-					.setStyle(ButtonStyle.Secondary),
-			);
+ new ButtonBuilder()
+.setCustomId('skip-btn')
+.setEmoji(client.emotes.skip)
+.setStyle(ButtonStyle.Secondary),
+);
     
-    const playse = new discord.EmbedBuilder()
-    .setAuthor({name: "Now Playing", iconURL: client.user.displayAvatarURL()})
-      .setThumbnail(song.thumbnail)
-    .setTitle(`**${client.emotes.song} : ${song.name}**`)
-    .addFields({name: `**${client.emotes.duration} Duration :**`, value: song.formattedDuration},
-               {name: "Requested By", value: `<@${song.user.id}>`})
-            .setFooter({text: status(queue)})
-  
-    await queue.textChannel.send({embeds: [playse], components: [row] });
-   
+const playse = new discord.EmbedBuilder()
+.setAuthor({name: "Now Playing", iconURL: client.user.displayAvatarURL()})
+.setThumbnail(song.thumbnail)
+.setTitle(`**${client.emotes.song} : ${song.name}**`)
+.addFields({name: `**${client.emotes.duration} Duration :**`, value: song.formattedDuration},
+{name: "Requested By", value: `<@${song.user.id}>`})
+.setFooter({text: status(queue)})
 
+let msgSent = await queue.textChannel.send({embeds: [playse], components: [row1, row] });
+let playerDBData = await playerData.findOne({ id: queue.textChannel.guild.id })
+    if (!playerDBData) {
+      playerDBData = new playerData({
+        id: queue.textChannel.guild.id,
+        messageId: msgSent.id,
+        messageChannel: msgSent.channel.id
+      })
+      await playerDBData.save()
+    } else {
+      playerDBData.messageId = msgSent.id;
+      playerDBData.messageChannel = msgSent.channel.id;
+      await playerDBData.save();
+    }
 }
- )
+ ).on('finishSong', async (queue) => {
+ 
+  let playerDBData = await playerData.findOne({ id: queue.textChannel.guild.id })
+  if (!playerDBData) return;
+    
+ queue.textChannel.messages.fetch(playerDBData.messageId)
+  .then(message => message.delete()).catch(console.error);
 
-  client.distube.on('addSong', (queue, song) =>{
+    
+}).on("initQueue", queue => {
+    queue.autoplay = false;
+    queue.volume = 100;
+}).on('addSong', (queue, song) =>{
     queue.textChannel.send(
       `${client.emotes.success} | Added ${song.name} - \`${song.formattedDuration}\` to the queue by ${song.user}`)
       }
     )
-  
+

@@ -1,5 +1,6 @@
 {
   "emoji": {
+    "volume": "<:volumeee2:1076825294868058202>",
     "autoplay": "<:icon_autoplay:1076133746429931630>",
     "previous": "<:icon_previous:1076122933908471849>",
     "play": "<:resume:1076006384526704640>",
@@ -8,9 +9,10 @@
     "song": "<a:Musica:1076023421311397889>",
     "stop": "<:musicstop_icons:1076006666056777758>",
     "queue": "📄",
-    "success": "☑️",
+    "success": "<:success:1076514330914340874>",
     "repeat": "🔁",
-    "error": "❌",
-    "skip": "<:icon_skip:1076055882716151838>"
+    "error": "<:icon_wrong:1076382906202722385>",
+    "skip": "<:icon_skip:1076055882716151838>",
+    "lyrics": "<:lyrics22:1077123619005661204>"
   }
 }
