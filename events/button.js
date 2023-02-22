@@ -8,11 +8,12 @@ client.on("interactionCreate", async (interaction) => {
     if (!interaction.member.voice.channel) return;
     await interaction.deferUpdate().catch(null);
 
-    if (interaction.customId === "previous-btn") {
-      if (queue.previous) {
-        queue.previous()
+    if (interaction.customId === "stop-btn") {
+      if (queue) {
+        queue.stop()
+        allembed.setDescription(`**${client.emotes.stop} : You stop the music!!**`)
         interaction.followUp({
-          content: `${queue.previous.name} now playing`,
+          embeds: [allembed],
           ephemeral: true,
         })
 

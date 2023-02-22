@@ -21,6 +21,7 @@ if(queue){
 
 	if (selected === 'filter_nightcore') {
 embed.setDescription(`**${client.emotes.success} : Nightcore filter succesfully enabled**`)
+queue.filters.clear();
 queue.filters.add("nightcore");
   interaction.followUp({
         embeds: [embed],
@@ -33,6 +34,14 @@ embed.setDescription(`**${client.emotes.success} : Resetting filter on this song
         ephemeral: true,
       })
 		queue.filters.clear();
+	} else if (selected === 'filter_3d') {
+embed.setDescription(`**${client.emotes.success} : 3D filter succesfully applied on this song!!**`)
+  interaction.followUp({
+       embeds: [embed],
+        ephemeral: true,
+      })
+		queue.filters.clear();
+    queue.filters.add("3d");
 	}
 }
 }

@@ -2,7 +2,7 @@ const { cooldown } = require("../handlers/functions");
 const client = require("../index");
 const { ids } = require("../owner.json");
 const db = require("../Database/noprefix.js");
-const prefix = "!!";
+let prefix;
 
 
 const { PermissionFlagsBits } = require("discord.js");
@@ -10,15 +10,22 @@ client.on("messageCreate", async (message) => {
 
   if (!message.guild.members.me.permissionsIn(message.channel.id).has(PermissionFlagsBits.SendMessages)) return;
   if (message.author.bot || !message.guild) return;
+let mentionRegex = message.content.match(new RegExp(`^<@!?(${client.user.id})>`, "gi"));
 
-let npDB = await db.findOne({
+  if(mentionRegex){
+    prefix = `${mentionRegex[0]}`; 
+  } else {
+    prefix = "!!"
+  }
+  let npDB = await db.findOne({
     ClientId: client.user.id
-  })
+  });
+
   if (!npDB) {
     npDB = new db({
-     ClientId: client.user.id,
+      ClientId: client.user.id,
       noprefixids: []
-    })
+    });
   }
   const checkNoPrefix = npDB.noprefixids.filter(g => g == message.author.id);
   if (!checkNoPrefix.length) {
@@ -51,5 +58,5 @@ let npDB = await db.findOne({
       command.run(client, message, args);
     }
   }
- 
+
 });
