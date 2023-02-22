@@ -2,6 +2,7 @@ const discord = require("discord.js")
 module.exports = {
 
   name: "skip",
+  category: "Music",
   description: "lock all channels",
   category: "antiraid",
   userPermissions: [discord.PermissionFlagsBits.SendMessages],

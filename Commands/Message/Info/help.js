@@ -1,4 +1,4 @@
-const { ApplicationCommandType, Client, CommandInteraction, PermissionFlagsBits, EmbedBuilder, voiceChannel, ActionRowBuilder, Events, SelectMenuBuilder } = require("discord.js");
+const { ApplicationCommandType, Client, CommandInteraction, PermissionFlagsBits, EmbedBuilder, voiceChannel, ActionRowBuilder, ButtonStyle, ButtonBuilder, Events, SelectMenuBuilder } = require("discord.js");
 const { codeBlock } = require("@discordjs/builders");
 
 module.exports = {
@@ -12,12 +12,15 @@ module.exports = {
   run: async (client, message, args) => {
     const embed = new EmbedBuilder()
       .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL() })
-      .setDescription(`Noisy Is A Discord Music Bot Made To Provide You With Many Breathtaking Features And Quality Music \n **Owner** \nSuhaib Chaudhary#0001\n \n[Support Server](https://discord.gg/noisy) \n \n\`Choose A Page From Menu Below\``)
+      .setDescription(`**Noisy Is A Discord Music Bot Made To Provide You With Many Breathtaking Features And Quality Music\n\nTo get started, join a voice channel and type $play to play a song! To get information about a specific command type $help <command name>.**\n`)
+.addFields({name: "Default Prefix :", value: "`$`"})
+    
     const row = new ActionRowBuilder()
+      
       .addComponents(
         new SelectMenuBuilder()
           .setCustomId('helpMenu')
-          .setPlaceholder('Noisy Always Awsome')
+          .setPlaceholder('Choose A Page From Menu Below')
           .addOptions([
             {
               label: 'Info',
@@ -35,11 +38,19 @@ module.exports = {
             {
               label: 'Music',
               description: 'This is a description as well',
-              value: 'third_option',
+              value: 'music',
               emoji: '1077496268433137754'
             },
           ]),
       );
-    await message.reply({ embeds: [embed], components: [row] });
+    const rowb = new ActionRowBuilder()
+			.addComponents(
+		  new ButtonBuilder()
+        .setLabel("Support Server")
+        .setURL("https://discord.gg/noisy")
+        .setStyle(ButtonStyle.Link)
+       
+			)
+    await message.reply({ embeds: [embed], components: [row, rowb] });
   }
 }

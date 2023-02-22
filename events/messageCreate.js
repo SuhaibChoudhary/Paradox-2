@@ -7,7 +7,7 @@ const prefix = "!!";
 
 const { PermissionFlagsBits } = require("discord.js");
 client.on("messageCreate", async (message) => {
-if(message.attachments.size !== 0) return;
+
   if (!message.guild.members.me.permissionsIn(message.channel.id).has(PermissionFlagsBits.SendMessages)) return;
   if (message.author.bot || !message.guild) return;
 

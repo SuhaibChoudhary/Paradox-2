@@ -1,9 +1,11 @@
-const discord = require("discord.js")
-module.exports = {
 
+const playerData = require("../../../Database/playerData.js");
+const discord = require("discord.js");
+
+module.exports = {
     name: "volume",
     description: "lock all channels",
-    category: "antiraid",
+    category: "Music",
     userPermissions: [discord.PermissionFlagsBits.SendMessages],
     botPermissions: [discord.PermissionFlagsBits.SendMessages],
     run: async (client, message, args) => {
@@ -27,7 +29,6 @@ module.exports = {
     }
       queue.setVolume(volume)
        message.reply({ embeds: [embed.setDescription(`**${client.emotes.success} :  Volume set to \`${volume}\`**`)]});
-  
    
     }
 }

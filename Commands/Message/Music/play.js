@@ -8,8 +8,7 @@ module.exports = {
     type: ApplicationCommandType.ChatInput,
     userPermissions: [PermissionFlagsBits.SendMessages],
     botPermissions: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.Speak, PermissionFlagsBits.Connect],
-
-    run: async (client, message, args) => {
+ run: async (client, message, args) => {
         const embed = new EmbedBuilder();
 
         const queue = client.distube.getQueue(message);
