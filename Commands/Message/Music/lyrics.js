@@ -1,3 +1,4 @@
+const discord = require("discord.js")
 const { Message, EmbedBuilder, PermissionFlagsBits } = require("discord.js");
 const client = require("../../../index");
 const { Queue } = require("distube");
@@ -24,16 +25,16 @@ module.exports = {
    * @param {String} prefix
    * @param {Queue} queue
    */
-run: async (client, message, args) => {
+  run: async (client, message, args) => {
     // Code
-    
-    
+
+
     const { lyrics } = await findLyrics(args.join(" "));
 
-  if(lyrics){
-    return message.reply(lyrics)
-    
-  }
-  message.reply("can't find lytics")
+    if (lyrics) {
+      return message.reply(lyrics, { split: true })
+
+    }
+    message.reply("can't find lyrics")
   },
 };

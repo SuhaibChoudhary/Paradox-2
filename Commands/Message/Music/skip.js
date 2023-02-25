@@ -5,8 +5,8 @@ module.exports = {
   category: "Music",
   description: "lock all channels",
   category: "antiraid",
-  userPermissions: [discord.PermissionFlagsBits.SendMessages],
-  botPermissions: [discord.PermissionFlagsBits.SendMessages],
+  userPermissions: [discord.PermissionFlagsBits.Connect],
+  botPermissions: [discord.PermissionFlagsBits.Speak, discord.PermissionFlagsBits.Connect],
   run: async (client, message, args) => {
 
     const queue = client.distube.getQueue(message);
@@ -15,10 +15,10 @@ module.exports = {
     if (!queue) return message.channel.send(` | There is nothing in the queue right now!`)
 
     if (!queue.autoplay && queue.songs.length == 1)
-    queue.stop();
-else
-    queue.skip();
-message.reply("skipped the song")
+      queue.stop();
+    else
+      queue.skip();
+    message.reply("skipped the song")
   }
 
 }

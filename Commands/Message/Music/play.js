@@ -1,5 +1,5 @@
 const { ApplicationCommandType, Client, CommandInteraction, PermissionFlagsBits, EmbedBuilder, voiceChannel } = require("discord.js");
-
+const discord = require("discord.js")
 module.exports = {
   name: "play",
   description: "Playin for members!!",
@@ -7,8 +7,8 @@ module.exports = {
   usage: "$play <song name>",
   category: "Music",
   type: ApplicationCommandType.ChatInput,
-  userPermissions: [PermissionFlagsBits.SendMessages],
-  botPermissions: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.Speak, PermissionFlagsBits.Connect],
+  userPermissions: [discord.PermissionFlagsBits.Connect],
+  botPermissions: [discord.PermissionFlagsBits.Speak, discord.PermissionFlagsBits.Connect],
   run: async (client, message, args) => {
     const embed = new EmbedBuilder();
 

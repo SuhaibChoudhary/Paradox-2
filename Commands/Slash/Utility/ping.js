@@ -1,13 +1,8 @@
-const {
-  ApplicationCommandType,
-  Client,
-  CommandInteraction,
-  PermissionFlagsBits
-} = require("discord.js");
+const { ApplicationCommandType, Client, CommandInteraction, PermissionFlagsBits } = require("discord.js");
 
 module.exports = {
   name: "ping",
-  description: "get ping of bot",
+  description: "tu krega ping??",
   category : "Utility",
   type: ApplicationCommandType.ChatInput,
   userPermissions: [PermissionFlagsBits.Administrator],
@@ -21,7 +16,7 @@ module.exports = {
   run: async (client, interaction) => {
     // code
     await interaction.reply({
-      content: "Pong !!",
+      content: "huihui",
     });
   },
 };

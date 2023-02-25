@@ -1,25 +1,48 @@
-const { cooldown } = require("../handlers/functions");
+const {
+  cooldown
+} = require("../handlers/functions");
 const client = require("../index");
-const { ids } = require("../owner.json");
+const {
+  ids
+} = require("../owner.json");
 const db = require("../Database/noprefix.js");
+const userData = require("../Database/userData.js");
+
 let prefix;
 
 
-const { PermissionFlagsBits } = require("discord.js");
+const {
+  PermissionFlagsBits
+} = require("discord.js");
 client.on("messageCreate", async (message) => {
 
   if (!message.guild.members.me.permissionsIn(message.channel.id).has(PermissionFlagsBits.SendMessages)) return;
   if (message.author.bot || !message.guild) return;
-let mentionRegex = message.content.match(new RegExp(`^<@!?(${client.user.id})>`, "gi"));
+  let mentionRegex = message.content.match(new RegExp(`^<@!?(${client.user.id})>`, "gi"));
 
-  if(mentionRegex){
-    prefix = `${mentionRegex[0]}`; 
+  if (mentionRegex) {
+    prefix = `${mentionRegex[0]}`;
   } else {
     prefix = "!!"
   }
+
+  let userdb = await userData.findOne({
+    id: message.author.id
+  })
+
+  if (!userdb) {
+    userdb = new userData({
+      name: message.author.username,
+      id: message.author.id,
+      joined: new Date(),
+      badges: []
+    });
+    userdb.save();
+  }
+
   let npDB = await db.findOne({
     ClientId: client.user.id
-  });
+  })
 
   if (!npDB) {
     npDB = new db({
@@ -54,6 +77,12 @@ let mentionRegex = message.content.match(new RegExp(`^<@!?(${client.user.id})>`,
       return message.reply({
         content: `i don't have enough permissions !!`,
       });
+    } else if (command?.ownersOnly == true && !ids.includes(message.author.id)) {
+      return message.reply({
+        content: `You don't have permission to use this command!`,
+      });
+    } else if (command.inVoiceChannel && !message.member.voice.channel) {
+      return message.channel.send(`${client.emotes.error} | You must be in a voice channel!`)
     } else {
       command.run(client, message, args);
     }

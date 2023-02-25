@@ -9,13 +9,9 @@ module.exports = {
   userPermissions: [PermissionFlagsBits.SendMessages],
   botPermissions: [PermissionFlagsBits.SendMessages, PermissionFlagsBits.Speak, PermissionFlagsBits.Connect],
 
-  run: async (client, message, args) => {
-
-      const embed = new EmbedBuilder()
-      .setAuthor({name: `${client.user.username} Internet Pings:`, iconURL: client.user.displayAvatarURL()})
-      .setTitle(`🏓 Is It Okay? I Can't Look`)
-      .addFields({name: "DISCORD API", value: codeBlock('js', `${client.ws.ping}ms`) })
-     message.reply({embeds: [embed]})
- 
+  run: async (client, message, args) => {    
+      const embed  = new EmbedBuilder() 
+      .setAuthor({name: `${client.user.username} Internet Pings:`, iconURL: client.user.displayAvatarURL()})      .setTitle(` 🏓 Is It Okay? I Can't Look`)      .addFields({name: "DISCORD A PI", value: codeBlock('js', `${client.ws.ping}ms`) }) 
+        message.reply({embeds: [embed]})   
     }
 }

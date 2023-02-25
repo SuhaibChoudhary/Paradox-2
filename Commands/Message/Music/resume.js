@@ -1,14 +1,14 @@
 const discord = require("discord.js")
 module.exports = {
 
-    name: "resume",
-    description: "lock all channels",
-    category: "Music",
-    userPermissions: [discord.PermissionFlagsBits.SendMessages],
-    botPermissions: [discord.PermissionFlagsBits.SendMessages],
-    run: async (client, message, args) => {
-      
-   const queue = client.distube.getQueue(message)
+  name: "resume",
+  description: "lock all channels",
+  category: "Music",
+  userPermissions: [discord.PermissionFlagsBits.Connect],
+  botPermissions: [discord.PermissionFlagsBits.Speak, discord.PermissionFlagsBits.Connect],
+  run: async (client, message, args) => {
+
+    const queue = client.distube.getQueue(message)
     if (!queue) return message.channel.send(`${client.emotes.error} | There is nothing in the queue right now!`)
     if (queue.paused) {
       queue.resume()
@@ -16,6 +16,6 @@ module.exports = {
     } else {
       message.channel.send('The queue is not paused!')
     }
-   
-    }
+
+  }
 }

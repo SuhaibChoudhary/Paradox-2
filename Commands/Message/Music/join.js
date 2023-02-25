@@ -1,11 +1,14 @@
 const { Constants } = require('discord.js')
-
+const discord = require("discord.js")
 module.exports = {
   name: 'join',
   category: "Music",
+  inVoiceChannel: true,
+    userPermissions: [discord.PermissionFlagsBits.Connect],
+  botPermissions: [discord.PermissionFlagsBits.Speak,  discord.PermissionFlagsBits.Connect],
   run: async (client, message, args) => {
 
-    if(message.guild.members.me.voice.channel) return message.channel.send(`**${client.emotes.error} : I am already in a voice channel first disconnect me else wait to auto disconnect function!!**`)
+    if (message.guild.members.me.voice.channel) return message.channel.send(`**${client.emotes.error} : I am already in a voice channel first disconnect me else wait to auto disconnect function!!**`)
     let voiceChannel = message.member.voice.channel
     if (args[0]) {
       voiceChannel = await client.channels.fetch(args[0])

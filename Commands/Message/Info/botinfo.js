@@ -15,8 +15,8 @@ module.exports = {
       .setThumbnail(client.user.displayAvatarURL())
       .setAuthor({ name: `${client.user.username} Stats /Botinfo Panel`, iconURL: client.user.displayAvatarURL() })
       .setDescription(`**Noisy Bot Interface!! \n\nBot Name: ${client.user.username}\nBotID : ${client.user.id}\nCommands: ${client.mcommands.size}**`)
- 
-      
-    await message.reply({ embeds: [embed]});
+
+
+    await message.reply({ embeds: [embed] });
   }
 }
