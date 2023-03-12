@@ -2,12 +2,13 @@ const { EmbedBuilder } = require("discord.js");
 module.exports = {
   name: "profile",
   cooldown: "5",
-  aliases: "badge",
+  aliases: ["pr", "badge"],
   run: async (client, message, args) => {
     let badgeRoles = {
       BugRole: '1078242380936908800',
       SpecialRole: '1078302998553440327',
-      BoosterRole: '1068585302270156800'
+      BoosterRole: '1068585302270156800',
+      SupporterRole: '1082166449004609577'
     }
 
     
@@ -18,8 +19,12 @@ module.exports = {
     if (member) {
       if (member._roles?.includes(badgeRoles['BugRole'])) array.push(`${client.emotes.bughunter} Bug Hunter`);
       if (member._roles?.includes(badgeRoles['SpecialRole'])) array.push(`${client.emotes.specialone} Special One`);
-      if (member._roles?.includes(badgeRoles['BoosterRole'])) array.push(`${client.emotes.booster} Booster`);
 
+ if (member._roles?.includes(badgeRoles['SupporterRole'])) array.push(`${client.emotes.supporter} Supporter`);
+      
+      if (member._roles?.includes(badgeRoles['BoosterRole'])) array.push(`${client.emotes.booster} Booster`);
+      
+      
       let embed = new EmbedBuilder()
         .setAuthor({
           name: message.author.tag,
@@ -32,7 +37,6 @@ module.exports = {
         }])
         .setTimestamp()
         .setColor('Blue')
-   
       message.reply({
         embeds: [embed]
       })

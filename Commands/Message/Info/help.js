@@ -25,6 +25,7 @@ module.exports = {
         let helpEmbed = new EmbedBuilder()
           .setTitle(`Details of **${cmd.name} Command**`)
           .setThumbnail(message.guild.iconURL())
+          .setColor(client.config.embed)
           .addFields([
             { name: "Name", value: `${cmd.name}` },
             { name: "Description", value: `${description}` },
@@ -46,7 +47,8 @@ module.exports = {
       const embed = new EmbedBuilder()
         .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL() })
         .setDescription(`**Noisy Is A Discord Music Bot Made To Provide You With Many Breathtaking Features And Quality Music\n\nTo get started, join a voice channel and type $play to play a song! To get information about a specific command type $help <command name>.**\n`)
-        .addFields({ name: "Default Prefix :", value: "`$`" })
+        .addFields({ name: "Default Prefix :", value: client.config.prefix })
+      .setColor(client.config.embed)
 
       const row = new ActionRowBuilder()
 

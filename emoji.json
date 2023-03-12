@@ -17,6 +17,16 @@
     "lyrics": "<:lyrics22:1077123619005661204>",
     "bughunter": "<:bughunter:1078218844931379220>",
     "specialone": "<:IconStar:1078303261351739412>",
-    "booster": "<:boost_icons:1072807765048836126>"
+    "booster": "<:boost_icons:1072807765048836126>",
+    "channelText": "<:icon8:1078931753877651496>",
+    "filter": "<:stolen_emoji:1080198802369159240>",
+    "channelCategory" : "<:channel:1078938237986418689>",
+    "info": "<:icons_info:1077495959703007283>",
+    "music": "<:stolen_emoji:1080198887408672798>",
+    "settings": "<:stolen_emoji:1080198968635572235>",
+    "moderation": "<:stolen_emoji:1080199022360408256>" ,
+    "supporter": "<:supporters_badge:1082166319379665036>"
+    
+    
   }
 }

@@ -1,10 +1,32 @@
+const express = require('express')
+const app = express()
+const port = 3000
+
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`)
+})
+
+process.on('unhandledRejection', (reason, p) => {
+    console.log(reason, p);
+});
+
+process.on('uncaughtException', (err, origin) => {
+    console.log(err, origin);
+});
+
 const discord = require("discord.js");
 const econfig = require('./emoji.json');
+const config = require("./settings/config.js");
 const playerData = require('./Database/playerData');
 const { ActionRowBuilder, ButtonBuilder, ButtonStyle, Events, Client, GatewayIntentBits, Partials, Collection, ActivityType, SelectMenuBuilder } = require("discord.js");
 const fs = require("fs");
 const { readdirSync } = require("fs");
 const { mongoUrl } = require("./settings/config.js")
+
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -27,6 +49,7 @@ const { SpotifyPlugin } = require("@distube/spotify");
 client.scommands = new Collection();
 client.mcommands = new Collection();
 client.emotes = econfig.emoji;
+client.config = config;
 client.distube = new DisTube(client, {
   emitNewSongOnly: true,
   leaveOnFinish: true,
@@ -49,107 +72,43 @@ connect(mongoUrl, {
 // connect to discord and mogodb
 client.login(process.env.TOKEN);
 
-const status = queue =>
-  `Volume: \`${queue.volume}%\` | Filter: \`${queue.filters.names.join(', ') || 'Off'}\` | Loop: \`${queue.repeatMode ? (queue.repeatMode === 2 ? 'All Queue' : 'This Song') : 'Off'
-  }\` | Autoplay: \`${queue.autoplay ? 'On' : 'Off'}\``
-
-
 
 client.distube
   .on('playSong', async (queue, song) => {
-    const row1 = new ActionRowBuilder()
-      .addComponents(
-        new SelectMenuBuilder()
-
-          .setCustomId('songPlay')
-
-          .setPlaceholder('Want add some filters?')
-
-          .addOptions([{
-            label: 'Reset',
-            value: 'filter_reset',
-            emoji: "1077999159908511814",
-          },
-          {
-            label: 'NIGHTCORE',
-            value: 'filter_nightcore',
-            emoji: "1077998234959630357",
-          },
-          {
-            label: '3D',
-            value: 'filter_3d',
-            emoji: "1077998234959630357",
-          },
-          ]),
-      );
-
-    const row = new ActionRowBuilder()
-
-      .addComponents(
-        new ButtonBuilder()
-          .setCustomId('lyrics-btn')
-          .setEmoji(client.emotes.lyrics)
-          .setStyle(ButtonStyle.Secondary),
-
-        new ButtonBuilder()
-          .setCustomId('pause-btn')
-          .setEmoji(client.emotes.pause)
-          .setStyle(ButtonStyle.Secondary),
-
-        new ButtonBuilder()
-          .setCustomId('resume-btn')
-          .setEmoji(client.emotes.play)
-          .setStyle(ButtonStyle.Secondary),
-
-        new ButtonBuilder()
-          .setCustomId('stop-btn')
-          .setEmoji(client.emotes.stop)
-          .setStyle(ButtonStyle.Secondary),
-
-        new ButtonBuilder()
-          .setCustomId('skip-btn')
-          .setEmoji(client.emotes.skip)
-          .setStyle(ButtonStyle.Secondary),
-      );
 
     const playse = new discord.EmbedBuilder()
-      .setAuthor({ name: "Now Playing", iconURL: client.user.displayAvatarURL() })
-      .setThumbnail(song.thumbnail)
-      .setTitle(`**${client.emotes.song} : ${song.name}**`)
-      .addFields({ name: `**${client.emotes.duration} Duration :**`, value: song.formattedDuration },
-        { name: "Requested By", value: `<@${song.user.id}>` })
-      .setFooter({ text: status(queue) })
-
-    let msgSent = await queue.textChannel.send({ embeds: [playse], components: [row1, row] });
-    let playerDBData = await playerData.findOne({ id: queue.textChannel.guild.id })
-    if (!playerDBData) {
-      playerDBData = new playerData({
-        id: queue.textChannel.guild.id,
-        messageId: msgSent.id,
-        messageChannel: msgSent.channel.id
-      })
-      await playerDBData.save()
-    } else {
-      playerDBData.messageId = msgSent.id;
-      playerDBData.messageChannel = msgSent.channel.id;
-      await playerDBData.save();
-    }
+      .setColor(client.config.embed)
+    .setDescription(`**${client.emotes.song} Started Playing [${song.name}](${client.config.support})**`)
+    .setFooter({text: `Use ${client.config.prefix}Panel for adding filters and buttons.`, iconURL: queue.textChannel.guild.iconURL()})
+    let msgSent = await queue.textChannel.send({ embeds: [playse] });
+   
   }
   ).on('finishSong', async (queue) => {
-
-    let playerDBData = await playerData.findOne({ id: queue.textChannel.guild.id })
-    if (!playerDBData) return;
-
-    queue.textChannel.messages.fetch(playerDBData.messageId)
-      .then(message => message.delete()).catch(console.error);
 
 
   }).on("initQueue", queue => {
     queue.autoplay = false;
     queue.volume = 100;
   }).on('addSong', (queue, song) => {
-    queue.textChannel.send(
-      `${client.emotes.success} | Added ${song.name} - \`${song.formattedDuration}\` to the queue by ${song.user}`)
-  }
-  )
-
+    const addSong = new discord.EmbedBuilder()
+    .setTitle("Added To Queue")
+    .setColor(client.config.embed)
+    .setDescription(`[${song.name}](${client.config.support})`)
+    queue.textChannel.send({embeds: [addSong]});
+  }).on('error', (channel, e) => {
+    const erorSong = new discord.EmbedBuilder()
+    .setTitle("Error Found")
+    .setDescription(`[${client.emotes.error} | An error encountered: ${e.toString().slice(0, 1974)}](${client.config.support})`)
+    .setColor("#ff0000")
+    if (channel) channel.send({embeds: [erorSong]})
+    else console.error(e)
+  }).on('finish', queue => {
+    const emptySong = new discord.EmbedBuilder()
+    .setColor(client.config.embed)
+    .setTitle("Thank you for using our service!")
+      .setImage(client.config.banner)
+    .setDescription(`Come join our [support server](${client.config.support}) to get information about updates, issues and for discussions about bot features!`)
+   queue.textChannel.send({embeds: [emptySong]})
+  })
+.on('searchNoResult', (message, query) =>
+   message.channel.send(`${client.emotes.error} | No result found for \`${query}\`!`))

@@ -3,7 +3,7 @@ const { EmbedBuilder, ChannelType } = require("discord.js");
 
 client.on("guildCreate", async(guild) =>{
   
-const webhookClient = client.channels.cache.get("1075802336577994843");
+const webhookClient = client.channels.cache.get(client.config.guildJoin);
   let mc = guild.memberCount.toString();
 const joinEmbed = new EmbedBuilder()
   .setColor("Red")
